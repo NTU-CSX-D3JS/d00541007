@@ -1,0 +1,96 @@
+<html>
+<head>
+	<script src="https://d3js.org/d3.v4.js">
+		//? https://d3js.org/d3.v4.min.js
+	</script>
+	<meta charset="uft-8">
+	<style>
+	body{
+	background-color: lightgray;	
+	}
+
+	h1 {margin: 0 0 10px 0;} 
+	h2 {margin: 10px 0 0 0;}
+	div {
+	    border: 1px solid gray;
+	    margin: 5px;
+	    background-color: lightyellow;}
+
+
+	.source{
+	    position: absolute;
+	    font-size:1.25em;
+	    font-weight:80;
+	    right :30px;
+	    text-decoration: none;
+	    color: gray;
+	}
+	</style>
+
+
+</head>
+<body>
+
+	<h1 style="text-align:center">Homewark-1_PY(D00541007)</h1>
+	<h2 style="text-align:center">The growth of electricity from deffrent energy source types. </h2>
+	
+	<div style="text-align:center;background-color:#fbf564;opacity:0.8;">Taiwan Power sector (unit: 0.1TWh).
+		</div>
+	
+	
+
+
+<script type="text/javascript">
+		var url="https://ntu-csx-d3js.github.io/d00541007/Taipower(39-105).csv"
+		d3.csv(url,function(data){
+			console.log(data);
+
+			var w=600
+			var h=300
+
+			var m=20
+			var N=50
+
+
+			//scale mapping
+			var Ymax=d3.max(data,function(d){return parseFloat(d.coal);});
+		// var Ymax=d3.max(data,function(d){return d.coal;});
+
+			var Ymin=d3.min(data,function(d){return parseFloat(d.nuclear);});
+			var Xmax=d3.max(data,function(d){return parseFloat(d.year);});
+			var Xmin=d3.min(data,function(d){return parseFloat(d.year);});
+			//建立xy尺度
+			var xScale =d3.scaleLinear().domain([Xmin,Xmax]).range([N,w-m]);
+			var yScale =d3.scaleLinear().domain([Ymin,Ymax]).range([h-m,N]);
+
+			//D3.js line generator
+			var lineCOAL=d3.line().x(function(d){return xScale(d.year);}).y(function(d){return yScale(d.coal);});
+			var lineRE=d3.line().x(function(d){return xScale(d.year);}).y(function(d){return yScale(d.renewable);});
+			var lineCOGEN=d3.line().x(function(d){return xScale(d.year);}).y(function(d){return yScale(d.cogen);});
+
+
+			var svg = d3.select('body').append('svg').attr('width', w).attr('height', h);
+			var lineChart1 = svg.append("g").append("path").attr("type", "line").attr("stroke", "red").attr("stroke-width", 3).attr("fill", "none").attr("d", function(d){ return lineCOAL(data); });
+			var lineChart2 = svg.append("g").append("path").attr("type", "line").attr("stroke", "blue").attr("stroke-width", 3).attr("fill", "none").attr("d", function(d){ return lineRE(data); });
+			var lineChart3 = svg.append("g").append("path").attr("type", "line").attr("stroke", "black").attr("stroke-width", 3).attr("fill", "none").attr("d", function(d){ return lineCOGEN(data); });
+			//Axis
+			var yAxis = d3.axisLeft(yScale);
+			var xAxis = d3.axisBottom(xScale);
+			var XaxisAppend = svg.append("g").attr("type", "axis").attr("transform", "translate(0,280)").call(xAxis);
+			var YaxisAppend = svg.append("g").attr("type", "axis").attr("transform", "translate("+N+",-5)").call(yAxis);
+			//? var YaxisAppend = svg.append("g").attr("type", "axis").attr("transform", "translate("+N+", h)").call(yAxis);
+
+
+
+
+				})
+
+
+	</script>
+
+<a class="source" href="http://www.taipower.com.tw/content/new_info/new_info-c37.aspx">資料來源：台電公司</a>
+
+	
+
+</body>
+</html>
