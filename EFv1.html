@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html>
+<html>
+  <head>
+
+    <script src="https://d3js.org/d3.v4.js">
+    </script>
+
+  </head>
+
+<body>
+
+<svg height="700" width="600">
+
+<path id="line chart" d="M 100 200 l 200 0 l 200 -100 l 0 400 l -200 100 l -200 0 l 0 -400" stroke="red" stroke-width="3" fill="none" />
+
+<path id="flow chart" d="M 150 250 l 100 0 q100 0 200 -50 l 100 -50 l 0 400 l -100 50 q-70 50 -200 50 l -100 0 l 0 -400" stroke="gray" stroke-width="3" fill="none" />
+
+
+
+<path id="flow" d="M200 200 q100 0 200 -50 " stroke="black" stroke-width="2" fill="none" />
+
+<path id="flow" d="M400 550 q-70 50 -200 50 " stroke="black" stroke-width="2" fill="none" />
+ 
+  
+    <!-- Mark relevant points -->
+  
+  
+  <g stroke="black" stroke-width="3" fill="black">
+    <circle id="pointA" cx="100" cy="200" r="3" />
+    <circle id="pointB" cx="200" cy="200" r="3" />
+    <circle id="pointC" cx="300" cy="200" r="3" />
+    <circle id="pointD" cx="400" cy="150" r="3" />
+     
+  </g>
+  
+   <!-- Label the points -->
+  
+  <g font-size="30" font-family="sans-serif" fill="black" stroke="none" text-anchor="middle">
+    <text x="100" y="200" dx="-20">A</text>
+    <text x="200" y="200" dy="-10">B</text>
+    <text x="300" y="200" dy="40">C</text>
+	<text x="400" y="150" dy="40">D</text>    
+    
+  </g>
+  
+   <g stroke="black" stroke-width="3" fill="black">
+    <circle id="pointA'" cx="150" cy="250" r="3" />
+    <circle id="pointB'" cx="250" cy="250" r="3" />
+    <circle id="pointD'" cx="450" cy="200" r="3" />
+    <circle id="pointE'" cx="550" cy="150" r="3" />
+     
+  </g>
+  
+   <!-- Label the points -->
+  
+  <g font-size="30" font-family="sans-serif" fill="black" stroke="none" text-anchor="middle">
+    <text x="150" y="250" dx="-20">A'</text>
+    <text x="250" y="250" dy="40">B'</text>
+    <text x="450" y="200" dy="40">D'</text>
+	<text x="550" y="150" dy="40">E'</text>    
+    
+  </g>
+  Sorry, your browser does not support inline SVG.
+  
+</svg>
+
+</body>
+</html>
