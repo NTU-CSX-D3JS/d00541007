@@ -1,0 +1,365 @@
+<html>
+<head>
+	<script src="https://d3js.org/d3.v4.js">
+		//? https://d3js.org/d3.v4.min.js
+	</script>
+
+	<meta charset="uft-8">
+	
+	<style>
+		body{
+		background-color: white;	
+		}
+
+		h1 {margin: 0 0 10px 0;} 
+		h2 {margin: 10px 0 0 0;}
+		div {
+		    border: 1px solid gray;
+		    margin: 5px;
+		    background-color: lightyellow;}
+	</style>
+
+
+</head>
+
+
+
+<body>
+
+	<h1 style="text-align:center">Homewark-1_PY(D00541007)</h1>
+	<h2 style="text-align:center">The growth of electricity from deffrent energy source. </h2>
+	
+	<div style="text-align:center;background-color:#fbf564;opacity:0.8;">Taiwan Power sector (unit: 0.1TWh).</div>
+
+	<svg width="640" height="260">/<svg>
+
+
+	<script type="text/javascript">
+
+		//var svg=d3.delect("svg")
+			//w = +svg.attr("width"),
+    		//h = +svg.attr("height");
+	
+		var url="https://ntu-csx-d3js.github.io/d00541007/Taipower(39-105).csv"
+		d3.csv(url,function(data){
+
+			console.log(data);
+
+			var w="500"
+			var h="300"
+
+			var m="20"
+			var N="50"
+
+
+			//scale mapping
+			var Ymax=d3.max(data,function(d){return parseFloat(d.coal);});
+			// var Ymax=d3.max(data,function(d){return d.coal;});
+
+			var Ymin=d3.min(data,function(d){return parseFloat(d.nuclear);});
+			var Xmax=d3.max(data,function(d){return parseFloat(d.year);});
+			var Xmin=d3.min(data,function(d){return parseFloat(d.year);});
+
+			//建立xy尺度
+			var xScale =d3.scaleLinear().domain([Xmin,Xmax]).range([N,w-m]);
+			var yScale =d3.scaleLinear().domain([Ymin,Ymax]).range([h-m,N]);
+
+			//D3.js line generator
+			var lineCOAL=d3.line().x(function(d){return xScale(d.year);}).y(function(d){return yScale(d.coal);});
+			var lineRE=d3.line().x(function(d){return xScale(d.year);}).y(function(d){return yScale(d.renewable);});
+			var lineCOGEN=d3.line().x(function(d){return xScale(d.year);}).y(function(d){return yScale(d.cogen);});
+			var lineGAS=d3.line().x(function(d){return xScale(d.year);}).y(function(d){return yScale(d.gas);});
+			var lineOIL=d3.line().x(function(d){return xScale(d.year);}).y(function(d){return yScale(d.oil);});
+			var lineWATER=d3.line().x(function(d){return xScale(d.year);}).y(function(d){return yScale(d.water);});
+			var lineNUCLEAR=d3.line().x(function(d){return xScale(d.year);}).y(function(d){return yScale(d.nuclear);});
+
+			var svg = d3.select('body').append('svg').attr('width', w).attr('height', h);
+
+			var lineChart1 = svg.append("g").append("path").attr("type", "line").attr("stroke", "red").attr("stroke-width", 3).attr("fill", "none").attr("d", function(d){ return lineCOAL(data); });
+			var lineChart2 = svg.append("g").append("path").attr("type", "line").attr("stroke", "blue").attr("stroke-width", 3).attr("fill", "none").attr("d", function(d){ return lineRE(data); });
+			var lineChart3 = svg.append("g").append("path").attr("type", "line").attr("stroke", "black").attr("stroke-width", 3).attr("fill", "none").attr("d", function(d){ return lineCOGEN(data); });
+			var lineChart4 = svg.append("g").append("path").attr("type", "line").attr("stroke", "yellow").attr("stroke-width", 3).attr("fill", "none").attr("d", function(d){ return lineGAS(data); });
+			var lineChart5 = svg.append("g").append("path").attr("type", "line").attr("stroke", "orange").attr("stroke-width", 3).attr("fill", "none").attr("d", function(d){ return lineOIL(data); });
+			var lineChart6 = svg.append("g").append("path").attr("type", "line").attr("stroke", "pink").attr("stroke-width", 3).attr("fill", "none").attr("d", function(d){ return lineWATER(data); });
+			var lineChart7 = svg.append("g").append("path").attr("type", "line").attr("stroke", "purple").attr("stroke-width", 3).attr("fill", "none").attr("d", function(d){ return lineNUCLEAR(data); });
+
+			//Axis
+			var yAxis = d3.axisLeft(yScale);
+			var xAxis = d3.axisBottom(xScale);
+			var XaxisAppend = svg.append("g").attr("type", "axis").attr("transform", "translate(0,280)").call(xAxis);
+				//?280="+(h-N)+"
+
+			var YaxisAppend = svg.append("g").attr("type", "axis").attr("transform", "translate("+N+",0)").call(yAxis);
+			//? var YaxisAppend = svg.append("g").attr("type", "axis").attr("transform", "translate("+N+", h)").call(yAxis);
+
+
+
+
+
+
+
+var padding = { top: 50, right: 50, bottom: 50, left: 50};
+
+
+
+
+// *** Append SVG canvas
+	var svg = d3.select('body').append('svg')
+	    .attr('width', w)
+	    .attr('height', h);
+	var lineChart1 = svg.append("g").append("path")
+	    .attr("type", "line")
+	    .attr("stroke", colorset[0])
+	    .attr("d", function(d){ return lineNUCLEAR(data); });
+	var lineChart2 = svg.append("g").append("path")
+	    .attr("type", "line")
+	    .attr("stroke", colorset[1])
+	    .attr("d", function(d){ return lineWATER(data); });
+	var lineChart3 = svg.append("g").append("path")
+	    .attr("type", "line")
+	    .attr("stroke", colorset[2])
+	    .attr("d", function(d){ return lineOIL(data); });
+	var lineChart4 = svg.append("g").append("path")
+	    .attr("type", "line")
+	    .attr("stroke", colorset[3])
+	    .attr("d", function(d){ return lineCOGEN(data); });
+	
+	var linestyle = svg.selectAll("path")
+	    .attr("transform", "translate(" + padding.left + "," + padding.top + ")");
+	
+
+
+
+			// *** Mouse event objects
+	var focusDot = svg.append("g")
+	    .attr("class", "focusDot")
+	    .style("display", "none");
+	
+	var dot1 = focusDot.append("circle").attr("stroke", colorset[0]);
+	var dot2 = focusDot.append("circle").attr("stroke", colorset[1]);
+	var dot3 = focusDot.append("circle").attr("stroke", colorset[2]);
+	var dot4 = focusDot.append("circle").attr("stroke", colorset[3]);
+	
+	var dot_attribute = svg.select(".focusDot").selectAll("circle")
+	    .attr("r", 7)
+	    .attr("stroke-width", 3)
+	    .attr("fill", "#2C2C39");
+	
+	
+	focusDot.append("text")
+	    .attr("dx", 10)
+	    .attr("dy", "1em");
+	var focusLine = svg.append("g")
+	    .attr("class", "focusLine")
+	    .style("display", "none");
+	var ver_line = focusLine.append("line")
+	    .style("stroke-dasharray", ("3,3"))
+	    .attr("stroke-width", 1)
+	    .attr("stroke", "white");
+	
+	focusLine.append("rect")
+	    .attr("width", 60)
+	    .attr("height", 30)
+	    .attr("fill", "white")
+	    .attr("rx", 5)
+	    .attr("ry", 5)
+	    .attr("opacity", 0.7);	    
+	focusLine.append("text")
+	    .attr("dx", 17)
+	    .attr("dy", 22)
+	    .attr("text-anchor", "start")
+	    .attr("fill", "black")
+	    .attr("font-size", "20px")
+	    .attr("font-weight", 200);
+    
+	var tracker = svg.append("rect")
+	    .attr("class", "overlay")
+	    .attr("x", padding.left)
+	    .attr("y", padding.top)
+	    .attr("width", width - padding.left - padding.right)
+	    .attr("height", height - padding.top - padding.bottom)
+	    .on("mouseover", function(){
+		focusDot.style("display", null);
+		focusLine.style("display", null);
+		statText.style("display", null);
+	    })
+	    .on("mouseout", function(){
+		focusDot.style("display", "none");
+		focusLine.style("display", "none");
+		statText.style("diaplay", "none");
+	    })
+	    .on("mousemove", mousemove);
+
+	function mousemove(){
+	    var mouseX = d3.mouse(this)[0] - padding.left;
+	    var mouseY = d3.mouse(this)[1] - padding.top;
+	    
+	    var x0 = parseInt( xScale.invert( mouseX ) );
+		
+	    var bisect = d3.bisector( function(d){ return d.year; }).left;
+	    var index = bisect(data, x0);
+	    
+	    var x1 = data[index].year;
+	    var y1 = data[index].coal;
+	    var y2 = data[index].gas; 
+	    var y3 = data[index].nuclear; 
+	    var y4 = data[index].renewable;
+	    var focusX = xScale(x1) + padding.left;
+	    var focusY1 = yScale(y1) + padding.top;
+	    var focusY2 = yScale(y2) + padding.top;
+	    var focusY3 = yScale(y3) + padding.top;
+	    var focusY4 = yScale(y4) + padding.top;
+	    dot1.attr("transform", "translate(" + focusX + "," + focusY1 + ")");
+	    dot2.attr("transform", "translate(" + focusX + "," + focusY2 + ")");
+	    dot3.attr("transform", "translate(" + focusX + "," + focusY3 + ")");
+	    dot4.attr("transform", "translate(" + focusX + "," + focusY4 + ")");
+	    
+	    stat1.text(y1).attr("fill", "white");
+	    stat2.text(y2).attr("fill", "white");
+	    stat3.text(y3).attr("fill", "white");
+	    stat4.text(y4).attr("fill", "white");
+	    
+	    focusLine.select("line")
+		.attr("x1", focusX)
+		.attr("y1", padding.top + 10)
+		.attr("x2", focusX)
+		.attr("y2", height - padding.bottom);
+	    
+	    focusLine.select("rect")
+		.attr("x", mouseX - 20)
+		.attr("y", mouseY);
+	    focusLine.select("text")
+		.attr("x", mouseX - 30)
+		.attr("y", mouseY)
+		.text(x1);
+	}
+
+
+			//
+
+			var colorLebel = svg.append("g")
+
+	    .attr("type", "colorLabel")
+	    .style("display", null);
+	var label1 = colorLebel.append("circle").attr("fill", colorset[0])
+	    .attr("cy", 2*padding.top);
+	var label2 = colorLebel.append("circle").attr("fill", colorset[1])
+	    .attr("cy", 3*padding.top);
+	var label3 = colorLebel.append("circle").attr("fill", colorset[2])
+	    .attr("cy", 4*padding.top);
+	var label4 = colorLebel.append("circle").attr("fill", colorset[3])
+	    .attr("cy", 5*padding.top);
+	
+	var label_attribute = colorLebel.selectAll("circle")
+	    .attr("cx", 2.5*padding.left)
+	    .attr("r", 7);
+
+
+	var text1 = colorLebel.append("text").text("燃煤發電：").attr("dy", 5);
+	var text2 = colorLebel.append("text").text("燃氣發電：").attr("dy", padding.top+5);
+	var text3 = colorLebel.append("text").text("核能發電：").attr("dy", 2*padding.top+5)
+	var text4 = colorLebel.append("text").text("再生能源：").attr("dy", 3*padding.top+5);	
+
+
+var text_attribute = colorLebel.selectAll("text")
+	    .style("text-anchor", "start")
+	    .attr("x", 3*padding.left - 10)
+	    .attr("y", 2*padding.top)
+	    .attr("fill", "white")
+	    .attr("font-weight", "100");
+   	
+	var statText = svg.append("g")
+	    .attr("class", "statText")
+	    .style("display", "none");
+	var stat1 = statText.append("text").text("test1").attr("dy", 5);
+	var stat2 = statText.append("text").text("test2").attr("dy", padding.top+5);
+	var stat3 = statText.append("text").text("test3").attr("dy", 2*padding.top+5);
+	var stat4 = statText.append("text").text("test4").attr("dy", 3*padding.top+5);
+	var stat_attribute = statText.selectAll("text")
+	    .style("text-anchor", "start")
+	    .attr("x", 4.5*padding.left)
+	    .attr("y", 2*padding.top)
+	    .attr("fill", "white")
+	    .attr("font-weight", "100");
+
+
+
+		})
+
+
+
+		</script>
+	
+	
+
+			<g>
+				<text text-anchor="start" x="545" y="21.05" font-family="Arial" font-size="13" stroke="none" stroke-width="0" fill="#222222">燃煤發電</text>
+			</g>
+
+			<rect x="514" y="16.5" width="26" height="6.5" stroke="none" stroke-width="0" fill-opacity="0.9" fill=red></rect>
+
+			<path d="M514,16.5 L540,16.5" stroke="none" stroke-width="0" fill-opacity="1" fill="none"></path>
+			
+		
+
+
+
+			<g>
+				<text text-anchor="start" x="545" y="42.05" font-family="Arial" font-size="13" stroke="none" stroke-width="0" fill="#222222">燃氣發電</text>
+
+			</g>
+			<rect x="514" y="37.5" width="26" height="6.5" stroke="none" stroke-width="0" fill-opacity="0.9" fill=yellow></rect>
+
+			<path d="M 514, 37.5 L 540, 37.5" stroke="none" stroke-width="0" fill-opacity="1" fill="none"></path>
+
+			</g>
+	
+
+
+	
+			<g>
+				<text text-anchor="start" x="545" y="63.05" font-family="Arial" font-size="13" stroke="none" stroke-width="0" fill="#222222">核能發電</text>
+			</g>
+			<rect x="514" y="58.5" width="26" height="6.5" stroke="none" stroke-width="0" fill-opacity="0.9" fill="purple"></rect>
+			<path d="M514,58.5L540,58.5" stroke="none" stroke-width="0" fill-opacity="1" fill="none"></path>
+	
+
+			<g>
+				<text text-anchor="start" x="545" y="84.05" font-family="Arial" font-size="13" stroke="none" stroke-width="0" fill="#222222">再生能源</text>
+			</g>
+
+			<rect x="514" y="79.5" width="26" height="6.5" stroke="none" stroke-width="0" fill-opacity="0.9" fill="blue"></rect>
+			<path d="M514,79.5L540,79.5" stroke="none" stroke-width="0" fill-opacity="1" fill="none"></path>
+	
+
+
+		
+			<g>
+				<text text-anchor="start" x="545" y="105.05" font-family="Arial" font-size="13" stroke="none" stroke-width="0" fill="#222222">燃油發電</text>
+			</g>
+			<rect x="514" y="100.5" width="26" height="6.5" stroke="none" stroke-width="0" fill-opacity="0.9" fill="orange"></rect>
+			<path d="M514,100.5 L 540,100.5" stroke="none" stroke-width="0" fill-opacity="1" fill="none"></path>
+	
+
+
+
+			<g>
+				<text text-anchor="start" x="545" y="126.05" font-family="Arial" font-size="13" stroke="none" stroke-width="0" fill="#222222">汽電共生</text>
+			</g>
+			<rect x="514" y="121.5" width="26" height="6.5" stroke="none" stroke-width="0" fill-opacity="0.9" fill="black"></rect>
+			<path d="M514,121.5 L540,79.5" stroke="none" stroke-width="0" fill-opacity="1" fill="none"></path>
+		
+			<g>
+				<text text-anchor="start" x="545" y="147.05" font-family="Arial" font-size="13" stroke="none" stroke-width="0" fill="#222222">抽蓄水力</text>
+			</g>
+			<rect x="514" y="142.5" width="26" height="6.5" stroke="none" stroke-width="0" fill-opacity="0.9" fill="pink"></rect>
+			<path d="M514,142.5L540,142.5" stroke="none" stroke-width="0" fill-opacity="1" fill="none"></path>
+
+
+
+		
+
+	
+
+</body>
+</html>
