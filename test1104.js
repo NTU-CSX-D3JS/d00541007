@@ -1,5 +1,5 @@
 
-function(a){"use strict";
+!function(a){"use strict";
 
 function b(a){this.owner=a}
 function c(a,b){
