@@ -1,0 +1,68 @@
+<html>
+<head>
+	<meta charset="uft-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 一定要使用 v.3.5.0 (v3) 的 d3.js 才有用 -->
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="test1104.js"></script>
+    <link href="c3.css" rel="stylesheet" type="text/css">
+    <title> c3.js </title>
+    <style>
+    #chart .c3-line-data2 {
+        stroke-width: 5px;
+    }
+    </style>
+
+	
+
+
+</head>
+
+
+
+<body>
+	<div id="chart">
+    </div>
+
+	<script type="text/javascript">
+
+
+//https://www.minwt.com/webdesign-dev/js/1365.html
+		var chart=c3.generator({
+			data:{
+			x:"x",
+			columns:[
+
+			["x","95","96","97","98","99","100","101","102","103","104","105"],	
+			
+			["燃油發電",1,2,3,4,5,6,7,8,9,10,11],
+			["燃氣發電",1,2,3,4,5,6,7,8,9,10,11],
+			[”核能發電“,1,2,3,4,5,6,7,8,9,10,11],	
+			[”水力“,1,2,3,4,5,6,7,8,9,10,11],	
+			[”再生能源“,1,2,3,4,5,6,7,8,9,10,11],	
+			]
+
+		},
+		axis:{
+			x:{
+				type:"timeseries",
+				tick:{
+					format:"&年"
+				}
+			}
+		}
+		});
+		setTimeout(function(){
+			chart.load({
+				columns:[
+				[”燃煤發電“,1,2,3,4,5,6,7,8,9,10,11],	
+				]
+			});
+		},12000);
+
+
+		</script>
+
+</body>
+
+</html>
