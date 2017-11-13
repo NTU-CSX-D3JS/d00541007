@@ -1,0 +1,70 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+</head>
+<body>
+
+<script>
+	
+			var data = [
+			{x:1,w:parseFloat(1)},
+			{x:2,w:parseFloat(10)},
+			{x:3,w:parseFloat(30)},
+			{x:4,w:parseFloat(100)},
+			{x:5,w:parseFloat(1)},
+
+
+			{x:6,w:parseFloat(130)},
+			{x:7,w:parseFloat(310)},
+			{x:8,w:parseFloat(110)},
+			{x:9,w:parseFloat(10)},
+			{x:10,w:parseFloat(80)},
+			];
+
+			//Create SVG element
+			var s = d3.select('body')
+          	.append('svg')
+          	.attr({
+            'width':600,
+            'height':600
+          	});
+
+			s.selectAll('rect')
+			 .data(data)
+			 .enter()
+			 .append('rect')
+			 .attr({
+			  'fill':'#09c',
+			  'width':function(d){
+			    return d.w;
+			  },
+			  'height':30,
+			  'x':0,
+			  'y':function(d){
+			    return (d.x-1) * 35;
+			  }
+			 });
+
+			s.selectAll('text')
+			 .data(data)
+			 .enter()
+			 .append('text')
+			 .text(function(d){
+			  return d.w;
+			 })
+			 .attr({
+			  'fill':'#000',
+			  'x':function(d){
+			    return d.w + 3;
+			  },
+			  'y':function(d){
+			    return d.x * 35 - 12;
+			  }
+			 });
+
+				
+	</script>
+
+</body>
+</html>
