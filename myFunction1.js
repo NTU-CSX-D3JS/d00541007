@@ -12,7 +12,7 @@ function myFunction1(s1) {
 
     var show = "(" + ss1.toString() + "+" + ss2.toString() + "+" + ss3.toString() + "+" + ss4.toString() + "+" +  ss5.toString() + ") = ";
     var sum = (s1[0] + s1[0] + s1[0]+ s1[0] + s1[0]);
-    var ans= round(sum, 2);
+    var ans= roundX(sum, 2);
     var str = yr + show + ans.toString();
     return str;
 }
