@@ -6,7 +6,7 @@ function myFunction1(s1, s2, s3, s4, s5, yr) {
 	var ss5= roundX(s5, 1)
 	var yr=yr.toString + "年"
 
-    var show = "(s1" + ss1.toString() + "+" + ss2.toString() + "s3" + ss3.toString() + "+" + "s4" + ss4.toString() + "+" + "ss5" + s5.toString() + ") = ";
+    var show = "(" + ss1.toString() + "+" + ss2.toString() + "+" + ss3.toString() + "+" + ss4.toString() + "+" +  s5.toString() + ") = ";
     var sum = (s1 + s2 + s3 + s4 + s5));
     var ans= roundX(sum, 2)
     var str = yr + show + ans.toString();
