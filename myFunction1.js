@@ -8,10 +8,10 @@ function myFunction1(s1) {
 	var ss3= roundX(s1[2], 1);
 	var ss4= roundX(s1[3], 1);
 	var ss5= roundX(s1[4], 1);
-	var yr=s1[5].toString() + "年";
+	var yr=s1[5].toString() + " 年 總電力消費量為";
 
     var show = "(" + ss1.toString() + "+" + ss2.toString() + "+" + ss3.toString() + "+" + ss4.toString() + "+" +  ss5.toString() + ") = ";
-    var sum = (s1[0] + s1[0] + s1[0]+ s1[0] + s1[0]);
+    var sum = (s1[0] + s1[1] + s1[2]+ s1[3] + s1[4]);
     var ans= roundX(sum, 2);
     var str = yr + show + ans.toString();
     return str;
