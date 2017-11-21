@@ -10,7 +10,11 @@
 <p id="try1"></p>
 
 <script>
-d3select("try1").innerHTML = myFunction1(133.44444, 2.333333, 42.44444,51.22222, 52.33333, 2015);
+  
+  function myFunction1(s1,s2,s3,s4,s5){return s1,s2,s3,s4,s5;}
+  
+  var arr =[133.44444, 2.333333, 42.44444,51.22222, 52.33333, 2015];
+ document.getElementById("try1").innerHTML = myFunction1(arr);
 </script>
 
 </body>
