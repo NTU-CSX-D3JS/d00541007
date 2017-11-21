@@ -1,3 +1,7 @@
+function roundX(val, precision) {
+  return Math.round(Math.round(val * Math.pow(10, (precision || 0) + 1)) / 10) / Math.pow(10, (precision || 0));
+}
+
 function myFunction1(s1, s2, s3, s4, s5, yr) {
 	var ss1= roundX(s1, 1);
 	var ss2= roundX(s2, 1);
