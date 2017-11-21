@@ -1,0 +1,175 @@
+<html>
+<head>
+	<script src="https://d3js.org/d3.v3.js">
+	</script>
+	<meta charset="uft-8">
+</head>
+
+<body>
+
+<div style="text-align:center;" id="class1">
+	<div style="display: inline-block;position:absolute; left:10%; top:10%;"" id="chart1"></div>
+	<div style="display: inline-block; position:absolute; left:70%; top:15%;" id="chart2">
+    <div style="display: inline-block;" id="chart3"></div>   
+    </div>
+</div>
+
+
+<script type="text/javascript">
+	//https://jsfiddle.net/ragingsquirrel3/qkHK6/
+//78.3 TPC 15.8 IPP 5.9 
+var r=250;
+var ww = 200;
+var hh = 200;
+var rr = hh/2;
+var color2 = d3.scale.category10();
+
+//第一個圖
+
+ var data = [133.3,44.9,2.9,48.3,1.3];
+       
+        var color=d3.scale.ordinal()
+        .range(["gray","green","red","yellow","green"]);
+
+        var canvas =d3.select("#chart1").append("svg")
+        .attr("width",800)
+        .attr("height",800);
+
+        var group=canvas.append("g")
+        .attr("transform","translate(300,300)");
+
+        var arc=d3.svg.arc()
+        .innerRadius(100)
+        .outerRadius(r);
+
+        var pie=d3.layout.pie()
+        .value(function(d) {return d; });
+
+        var arcs=group.selectAll(".arc")
+        .data(pie(data))
+        .enter()
+        .append("g")
+        .attr("class","arc");
+
+        arcs.append("path")
+        .attr("d",arc)
+        .attr("fill",function(d){return color(d.data)});
+
+        arcs.append("text")
+        .attr("transform",function(d){return "translate("+ arc.centroid(d) + ")" ;})
+        .attr("text-anchor", "middle")
+        .attr("font-size","3em")
+        .text(function(d){return d.data});
+
+
+//第二個圖
+//Wgt 61 Wst 39%
+//Exergy loss 54.9% Useful exergy output 45.1%
+
+    var data2 = [{"label":"Wgt", "value":61}, 
+    		          {"label":"Wst", "value":39}];
+    var vis2 = d3.select('#chart2').append("svg:svg").data([data2]).attr("width", ww).attr("height", hh).append("svg:g").attr("transform", "translate(" + rr + "," + rr + ")");
+    var pie2 = d3.layout.pie().value(function(d){return d.value;});
+    // declare an arc generator function
+    var arc2 = d3.svg.arc().outerRadius(rr);
+    // select paths, use arc generator to draw
+    var arcs2 = vis2.selectAll("g.slice").data(pie2).enter().append("svg:g").attr("class", "slice");
+    arcs2.append("svg:path")
+        .attr("fill", function(d, i){
+            return color2(i);
+        })
+        .attr("d", function (d) {
+            // log the result of the arc generator to show how cool it is :)
+            console.log(arc2(d));
+            return arc2(d);
+        });
+    // add the text
+    arcs2.append("svg2:text").attr("transform", function(d){
+    			d.innerRadius = 0;
+    			d.outerRadius = r;
+        return "translate(" + arc2.centroid(d) + ")";}).attr("text-anchor", "middle").attr("font-size","2em").text( function(d, i) {
+        return data2[i].label;}
+    		);
+
+
+//第三個圖
+
+    var dataset = [
+        { name: '工業部門', percent: 133.3 },
+        { name: '服務業部門', percent:48.3 },
+        { name: '服務業部門', percent:44.9 },
+        { name: '農業部門', percent:2.9 },
+        { name: '運輸部門', percent: 1.3 },
+    ];
+     
+     
+    var w=300,h=300;
+     
+    var radius=(w-20)/2;
+     
+    var pie=d3.layout.pie()
+            .value(function(d){return d.percent})
+            .sort(null);
+     
+    var arc=d3.svg.arc()
+            .innerRadius(0)
+            .outerRadius(radius);
+     
+    var color = d3.scale.ordinal()
+            .range([ 'black','#33bb9d','blue','red','yellow']);
+     
+    var svg=d3.select("#chart2")
+            .append("svg")
+            .attr({
+                width:w,
+                height:h,
+                class:'shadow'
+            }).append('g')
+            .attr('transform','translate('+(w/2)+','+(h/2)+')');
+     
+    var path=svg.selectAll('path')
+            .data(pie(dataset))
+            .enter()
+            .append('path')
+            .attr({
+                d:arc,
+                fill:function(d,i){
+                    return color(i);
+                }
+            })
+            .style({
+                'fill-opacity':.15,
+                stroke: function(d,i){
+                    return color(i);
+                },
+                'stroke-width': '2px'
+            });
+     
+     
+    var text=svg.selectAll('text')
+            .data(pie(dataset))
+            .enter()
+            .append("text")
+            .attr("transform", function (d) {
+                return "translate(" + arc.centroid(d) + ")";
+            })
+            .attr("text-anchor", "middle")
+      
+            .text(function(d){
+                return d.data.name+" ("+d.data.percent+"TWh)" ;
+            })
+           
+            .style({
+                fill:function(d,i){
+                    return color(i);
+                },
+                'font-size':'12px',
+     
+            });
+	</script>
+
+
+
+</body>	
+
+</html>
