@@ -1,0 +1,201 @@
+<html>
+<head>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+
+
+
+<body>
+<script>
+var width = 1000;
+var height = 600;
+var margin = {top:50, right:100, bottom:100, left:100};
+var w = width - margin.left - margin.right;
+var h = height - margin.top - margin.bottom;
+var x = d3.scaleBand()
+    .range([0,w])
+    .paddingInner(0.05)
+    .align(0.1);
+var y = d3.scaleLinear()
+    .range([h,0]);
+var keys = ["other", "S","M","N"];
+var z = d3.scaleOrdinal().range(["yellow", "green", "blue", "red"]);
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+var parseTime = d3.timeParse("%Y");
+url = "https://ntu-csx-d3js.github.io/d00541007/oil_ele_motor.csv"
+d3.text(url, function(data){
+	
+	var data_parse = d3.csvParse(data);
+	
+	data_parse.forEach(function(d){
+	    d.Year = parseTime(d.Year);
+	    d.N = parseInt(d.N);
+	    d.M = parseInt(d.M);
+		d.S = parseInt(d.S);
+		d.other = parseInt(d.other);
+		d.N_e_ratio= parseFloat(d.N_e_ratio);
+		d.M_e_ratio = parseFloat(d.M_e_ratio);
+		d.S_e_ratio = parseFloat(d.S_e_ratio);
+		d.O_e_ratio = parseFloat(d.O_e_ratio);
+	    d.heavy = parseInt(d.heavy);
+	    d.light = parseInt(d.light);
+	    d.e_ratio = parseFloat(d.e_ratio);
+	    d.heavy_e_ratio = parseFloat(d.heavy_e_ratio);
+		d.light_e_ratio = parseFloat(d.light_e_ratio);
+	  
+	});
+	console.log(data_parse);
+	//console.log(data_parse[0]); 
+	x.domain(data_parse.map(function(d) { return d.Year;}));
+	xAxis = d3.axisBottom(x)
+	    //.ticks(3)
+	    //.ticks(d3.timeHour, 5)
+	    .tickFormat(d3.timeFormat("%Y"))
+	    ;
+	
+	y.domain([0, d3.max(data_parse, function(d) { return (d.N + d.M+d.S+d.other)*1.4})]);
+	z.domain(keys);
+	
+	var stackchart = svg.append("g")
+	.selectAll("g")
+	.data(d3.stack().keys(keys)(data_parse))
+	.enter().append("g")
+	  .attr("fill", function(d) { return z(d.key); })
+	  .attr("opacity", 0.8)
+	.selectAll("rect")
+	.data(function(d) { return d;})
+	.enter().append("rect")
+	  .attr("x", function(d) { 
+	    return x(d.data.Year); })
+	  .attr("y", function(d) { return y(d[1]); })
+	  .attr("height", function(d) { return y(d[0]) - y(d[1]); })
+	  .attr("width", x.bandwidth() )
+	  
+	  .on("mouseover", function(d) { 
+	    tooltip.style("display", null);
+	    m1.text(d.data.heavy);
+	    m2.text(d.data.light);
+	    m3.text(d.data.N + d.data.M + d.data.S + d.data.other);
+		m4.text(d.data.heavy_e_ratio);
+	    m5.text(d.data.light_e_ratio);
+	    m6.text(d.data.e_ratio);
+	    m7.text(d.data.N_e_ratio);
+	    m8.text(d.data.M_e_ratio);
+	    m9.text(d.data.S_e_ratio);
+	    m10.text(d.data.O_e_ratio);
+	  })
+	  .on("mouseout", function() { 
+	    tooltip.style("display", "none");
+	  })
+	  .on("mousemove", function(d){
+	    tooltip.style("display", null);
+	    var trX = d3.mouse(this)[0];
+	    var trY = d3.mouse(this)[1] - 10;
+	    tooltip.attr("transform", "translate(" + trX + "," + trY + ")");
+	    tooltip.select("text").text(d[1] - d[0]);
+	  });
+	  
+	svg.append("g")
+		.attr("transform", "translate(0," + h + ")" )
+		.call(xAxis)
+	    .selectAll("text")
+		.style("text-anchor", "end")
+		.attr("dx", "-0.8em")
+		.attr("dy", "-0.55em")
+		.attr("transform", "rotate(-90)");
+	
+	svg.append("g")
+	    .call(d3.axisLeft(y));
+	svg.append("text").attr("x", w/2).attr("y",0)
+	    .attr("text-anchor", "middle")
+	    .style("font-size", "1.8em")
+	    .attr("fill", "black")
+	    .style("font-weight", 100)
+	    .text("各區機車分布趨勢");
+	svg.append("text")
+	    .attr("transform", "translate(" + (margin.left - 100) + "," + (-10) + ")")
+	    .attr("text-anchor", "middle")
+	    .text("機車數量 (萬輛)")
+	    .style("font-weight", 200)
+	    .attr("font-size", "16px")
+	    .attr("opacity", 0.8);
+      
+	var legend = svg.append("g")
+	    .attr("font-size", 12)
+	    .attr("text-anchor", "end")
+	  	.selectAll("g")
+	  	.data(keys.slice().reverse())
+	  	.enter().append("g")
+	    .attr("transform", function(d,i){
+	      return "translate(0," + (50 + i * 25) + ")";
+	    });
+	legend.append("rect")
+	  .attr("x", w - 20)
+	  .attr("width", 20)
+	  .attr("height", 20)
+	  .attr("fill", z);
+	legend.append("text")
+	  .attr("x", w - 30)
+	  .attr("y", 10)
+	  .attr("dy", "0.32em")
+	  .text(function(d) { return d;});
+	
+	var monitor = svg.append("g")
+	    .attr("font-size", 12)
+	    .attr("text-anchor", "start")
+	    .attr("transform", "translate(0, 30)");
+	
+	var mx1 = 20;
+	var mx2 = 90;
+	var mx3 = 145;
+	var mx4 = 240;
+	var mx5 = 340;
+	var mx6 = 470;
+	monitor.append("text").attr("x", mx1).attr("dy", 10).text("重型機車:");
+	monitor.append("text").attr("x", mx1).attr("dy", 35).text("輕型機車");
+	monitor.append("text").attr("x", mx1).attr("dy", 60).text("總機車數量:");
+	monitor.append("text").attr("x", mx3).attr("dy", 10).text("電動車佔比(%):");
+	monitor.append("text").attr("x", mx3).attr("dy", 35).text("電動車佔比(%):");
+	monitor.append("text").attr("x", mx3).attr("dy", 60).text("電動機車佔比(%):");
+	monitor.append("text").attr("x", mx5).attr("dy", 10).text("北區電動機車占比(%):"); 
+	monitor.append("text").attr("x", mx5).attr("dy", 35).text("中區電動機車占比(%):");	
+	monitor.append("text").attr("x", mx5).attr("dy", 60).text("南區電動機車占比(%):");
+	monitor.append("text").attr("x", mx5).attr("dy", 85).text("離島電動機車占比(%):");
+	
+	
+	
+	var 
+	m1 = monitor.append("text").attr("x", mx2).attr("dy", 10).text("0"),
+	m2 = monitor.append("text").attr("x", mx2).attr("dy", 35).text("0"),
+	m3 = monitor.append("text").attr("x", mx2).attr("dy", 60).text("0"),
+	m4 = monitor.append("text").attr("x", mx4).attr("dy", 10).text("0"),	
+	m5 = monitor.append("text").attr("x", mx4).attr("dy", 35).text("0"),
+	m6 = monitor.append("text").attr("x", mx4).attr("dy", 60).text("0");
+	m7 = monitor.append("text").attr("x", mx6).attr("dy", 10).text("0");
+	m8 = monitor.append("text").attr("x", mx6).attr("dy", 35).text("0");
+	m9 = monitor.append("text").attr("x", mx6).attr("dy", 60).text("0");
+	m10 = monitor.append("text").attr("x", mx6).attr("dy", 85).text("0");
+	var tooltip = svg.append("g")
+	  .attr("class", "tooltip")
+	  .style("display", "none");
+	tooltip.append("rect")
+	  .attr("width", 70)
+	  .attr("height", 20)
+	  .attr("fill", "black")
+	  .attr("opacity", 0.6);
+	tooltip.append("text")
+	  .attr("x", 35)
+	  .attr("dy", "1.2em")
+	  .attr("fill", "white")
+	  .style("text-anchor", "middle")
+	  .attr("font-size", 12)
+	  .attr("font-weight", 100);
+});
+</script>
+
+</body>
+</html>
